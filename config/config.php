@@ -3,7 +3,7 @@
 return [
     'db' => [
         'host' => 'localhost',
-        'dbname' => 'api_mvc',
+        'dbname' => 'requests',
         'username' => 'root',
         'password' => '',
     ],

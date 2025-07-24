@@ -6,15 +6,20 @@ require_once __DIR__ . '/core/Database.php';
 require_once __DIR__ . '/core/Controller.php';
 require_once __DIR__ . '/core/Router.php';
 require_once __DIR__ . '/application/models/Model.php';
+require_once __DIR__ . '/application/models/RequestModel.php';
+
 require_once __DIR__ . '/application/models/User.php';
 require_once __DIR__ . '/application/controllers/HomeController.php';
 require_once __DIR__ . '/application/controllers/DataController.php';
+require_once __DIR__ . '/application/controllers/RequestController.php';
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 use App\Controllers\DataController;
 use Application\Core\Database;
 use Application\Core\Router;
 use App\Controllers\HomeController;
+use App\Controllers\RequestController;
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
@@ -26,6 +31,7 @@ Database::getInstance($config['db']);
 $router = new Router();
 $controller = new HomeController();
 $dataController = new DataController();
+$requestController = new RequestController();
 
 $router->add('POST', '/register', [$controller, 'register']);
 $router->add('POST', '/login', [$controller, 'login']);
@@ -33,6 +39,17 @@ $router->add('POST', '/login', [$controller, 'login']);
 $router->add('GET', '/profile', [$controller, 'profile']);
 
 //data 
+$router->add('GET', '/data', [$dataController, 'index']);
+
+//request 
+$router->add('GET', '/requests', [$requestController, 'index']);
+$router->add('GET', '/request/create', [$requestController, 'create']);
+$router->add('POST', '/request/store', [$requestController, 'store']);
+
+$router->add('GET', '/send-tequest-to-url', [$requestController, 'sendRequestToUrl']);
+
+
+
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
