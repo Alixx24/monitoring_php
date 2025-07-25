@@ -12,6 +12,8 @@ require_once __DIR__ . '/application/models/User.php';
 require_once __DIR__ . '/application/controllers/HomeController.php';
 require_once __DIR__ . '/application/controllers/DataController.php';
 require_once __DIR__ . '/application/controllers/RequestController.php';
+require_once __DIR__ . '/application/controllers/TicketController.php';
+
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -20,6 +22,7 @@ use Application\Core\Database;
 use Application\Core\Router;
 use App\Controllers\HomeController;
 use App\Controllers\RequestController;
+use App\Controllers\TicketController;
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
@@ -28,10 +31,13 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 $config = require __DIR__ . '/config/config.php';
 Database::getInstance($config['db']);
 
+
+//instance
 $router = new Router();
 $controller = new HomeController();
 $dataController = new DataController();
 $requestController = new RequestController();
+$ticketController = new TicketController();
 
 $router->add('POST', '/register', [$controller, 'register']);
 $router->add('POST', '/login', [$controller, 'login']);
@@ -48,6 +54,8 @@ $router->add('POST', '/request/store', [$requestController, 'store']);
 
 $router->add('GET', '/send-tequest-to-url', [$requestController, 'sendRequestToUrl']);
 
+//Ticket
+$router->add('GET', '/panel/tickets', [$ticketController, 'allTickets']);
 
 
 
