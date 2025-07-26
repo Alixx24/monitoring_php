@@ -23,6 +23,35 @@ class TicketController extends Controller
 
     public function allTickets()
     {
+                $apiKey = "acf07ed4";
+
+        $movieTitle = 'Inception';
+        $url = "http://www.omdbapi.com/?apikey=$apiKey&s=" . urlencode($movieTitle);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+
+        if(curl_errno($ch))
+        {
+            $error = curl_error($ch);
+            curl_close($ch);
+            $movies = ['error' => $error];
+        }
+        else{
+            $error = curl_error($ch);
+            $data = json_decode($response, true);
+            $movies = isset($data['Search']) ? $data['Search'] : [];
+        }
+        require __DIR__ . '/../views/panel/requests/index.php';
+    }
+
+
+
+
+    public function allTicketsApi()
+    {
         header('Content-Type: application/json');
 
         $apiKey = "acf07ed4";
@@ -59,7 +88,7 @@ class TicketController extends Controller
         $data = json_decode($response, true);
 
         if (isset($data['Search'])) {
-            
+
             echo json_encode($data['Search']);
         } else {
             echo json_encode(['message' => 'No movies found.']);
@@ -78,10 +107,6 @@ class TicketController extends Controller
         //     echo "No movies found.";
         // }
     }
-
-
-
-
 
 
 

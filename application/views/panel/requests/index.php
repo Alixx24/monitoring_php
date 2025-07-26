@@ -1,5 +1,13 @@
 <?php require_once __DIR__ . '/../layout/header.php'; ?>
-
+    <title>لیست فیلم‌ها</title>
+    <style>
+        /* استایل ساده برای زیبایی */
+        body { font-family: Tahoma, sans-serif; background: #f7f9fc; padding: 20px; direction: rtl; }
+        .movie { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { margin: 0 0 5px; color: #0077cc; }
+        p { margin: 3px 0; }
+        .error { color: red; font-weight: bold; }
+    </style>
 <body>
 <?php
 session_start();
@@ -20,36 +28,23 @@ if (!empty($_SESSION['error'])) {
 }
 ?>
 
-<div>
-  <a class="btn btn-success m-3" href="<?php echo "request/create"; ?>">Create</a>
-</div>
-  <table class="table table-striped ">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">id</th>
-        <th scope="col">url</th>
-        <th scope="col">name</th>
-                <th scope="col">email</th>
-                 <th scope="col">time(ms)</th>
-        <th scope="col">created_at</th>
-   
+<body>
 
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach ($requests as $request) { ?>
-        <tr>
-          <th scope="row">1</th>
-          <td><?= $request['id']; ?></td>
-          <td><?= $request['url']; ?></td>
-          <td><?= $request['name']; ?></td>
-          <td><?= $request['email']; ?></td>
-            <td><?= ($request['time']) ? $request['time'] : '-' ?></td>
-          <td><?= $request['created_at']; ?></td>
-        </tr>
+<h1>لیست فیلم‌ها</h1>
 
-      <?php } ?>
-    </tbody>
-  </table>
+<?php if (isset($movies['error'])): ?>
+    <div class="error">خطا: <?= htmlspecialchars($movies['error']) ?></div>
+<?php elseif (empty($movies)): ?>
+    <p>هیچ فیلمی یافت نشد.</p>
+<?php else: ?>
+    <?php foreach ($movies as $movie): ?>
+        <div class="movie">
+            <h2><?= htmlspecialchars($movie['Title']) ?></h2>
+            <p>سال ساخت: <?= htmlspecialchars($movie['Year']) ?></p>
+            <p>نوع: <?= htmlspecialchars($movie['Type']) ?></p>
+            <p>IMDB ID: <?= htmlspecialchars($movie['imdbID']) ?></p>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
+
 </body>
